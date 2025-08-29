@@ -6,6 +6,7 @@ matplotlib>=3.10.5
 seaborn>=0.13.2
 joblib>=1.5.2
 imbalanced-learn<=0.14.0
+plotly>=5.20.0
 rich>=14.1.0
 markdown-it-py>=4.0.0
 mdurl~=0.1
