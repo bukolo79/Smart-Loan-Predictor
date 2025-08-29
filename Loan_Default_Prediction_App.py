@@ -1,20 +1,30 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Sat Aug 23 23:33:56 2025
-
-@author: Oluwaseun Adeyemi
-"""
-
 import streamlit as st
+
+# ---------------------- Page Config ----------------------
+st.set_page_config(
+    page_title="Loan Default Prediction App",
+    layout="wide",
+    page_icon="💳"
+)
+
+# ---------------------- Imports ----------------------
 import pandas as pd
 import joblib
 import plotly.graph_objects as go
+import os
 
 # ---------------------- Load Model ----------------------
-model = joblib.load("adaboost_pipeline.pkl")
+MODEL_PATH = os.path.join(os.path.dirname(__file__), "adaboost_pipeline.pkl")
 
-# ---------------------- Page Config ----------------------
-st.set_page_config(page_title="Loan Default Prediction App", layout="wide", page_icon="💳")
+@st.cache_resource
+def load_model(path):
+    try:
+        return joblib.load(path)
+    except Exception as e:
+        st.error(f"Error loading model: {e}")
+        return None
+
+model = load_model(MODEL_PATH)
 
 # ---------------------- Custom CSS ----------------------
 st.markdown("""
@@ -36,8 +46,6 @@ h1, h2, h3 { color: #2E86C1; }
 
 # ---------------------- Sidebar ----------------------
 st.sidebar.title("👤 Client Inputs")
-
-# Sidebar About the App
 st.sidebar.markdown("""
 ### ℹ️ About This App
 This application helps financial institutions **assess loan risk efficiently** using key customer behavioral and financial features.  
@@ -86,16 +94,12 @@ else:
 
 # ---------------------- Main Page ----------------------
 st.title("💳 Loan Default Prediction App")
-
-# Main Page Introduction
 st.markdown("""
 ### Welcome!
 Use this application to **predict the risk of loan default** based on client behavioral and financial data.  
 
 Powered by **machine learning**, it provides **quick, reliable, and actionable insights** to help lenders make confident decisions while minimizing potential losses.
 """)
-
-# Verify client details message immediately after introduction
 st.info("⚠️ Please verify the client details below before making a prediction.")
 
 # Store client data
@@ -110,7 +114,7 @@ client_data = {
 }
 st.session_state["client_data"] = client_data
 
-# Tabs for Client Summary and Prediction
+# Tabs
 tab1, tab2 = st.tabs(["📋 Client Summary", "📊 Prediction"])
 
 # ---------------------- Client Summary ----------------------
@@ -127,33 +131,35 @@ with tab2:
     input_data = pd.DataFrame([st.session_state["client_data"]])
 
     if st.session_state['predict'] or st.button("🔮 Predict Loan Default Risk", key="main_predict"):
-        prediction = model.predict(input_data)[0]
-        probability = model.predict_proba(input_data)[0][1]
+        if model:
+            prediction = model.predict(input_data)[0]
+            probability = model.predict_proba(input_data)[0][1]
 
-        # Color-coded result with Yes/No
-        if prediction == 1:
-            st.markdown(
-                f"<div class='result-box' style='background-color:#F1948A; color:white;'>"
-                f"🚨 Prediction: Yes (Default)<br>Probability: {probability:.2%}</div>",
-                unsafe_allow_html=True
+            if prediction == 1:
+                st.markdown(
+                    f"<div class='result-box' style='background-color:#F1948A; color:white;'>"
+                    f"🚨 Prediction: Yes (Default)<br>Probability: {probability:.2%}</div>",
+                    unsafe_allow_html=True
+                )
+            else:
+                st.markdown(
+                    f"<div class='result-box' style='background-color:#58D68D; color:white;'>"
+                    f"✅ Prediction: No (Non-Default)<br>Probability: {probability:.2%}</div>",
+                    unsafe_allow_html=True
+                )
+
+            # Probability Bar Plot
+            fig = go.Figure(go.Bar(
+                x=["Non-Default", "Default"],
+                y=[1-probability, probability],
+                marker_color=["#58D68D", "#F1948A"]
+            ))
+            fig.update_layout(
+                title="Probability Distribution",
+                yaxis_title="Probability",
+                xaxis_title="Outcome",
+                plot_bgcolor="#f9f9f9"
             )
+            st.plotly_chart(fig, use_container_width=True)
         else:
-            st.markdown(
-                f"<div class='result-box' style='background-color:#58D68D; color:white;'>"
-                f"✅ Prediction: No (Non-Default)<br>Probability: {probability:.2%}</div>",
-                unsafe_allow_html=True
-            )
-
-        # Probability Bar Plot
-        fig = go.Figure(go.Bar(
-            x=["Non-Default", "Default"],
-            y=[1-probability, probability],
-            marker_color=["#58D68D", "#F1948A"]
-        ))
-        fig.update_layout(
-            title="Probability Distribution",
-            yaxis_title="Probability",
-            xaxis_title="Outcome",
-            plot_bgcolor="#f9f9f9"
-        )
-        st.plotly_chart(fig, use_container_width=True)
+            st.error("Model not loaded. Cannot make prediction.")
