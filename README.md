@@ -126,4 +126,4 @@ Three datasets were merged for analysis:
   - **Main Page:** Introduction, Verify Client Details, Prediction, Client Summary, Probability Plot  
   - **Color-coded results:** Red = Default, Green = Non-default  
 
-- **Live App:** [smartloanpredictor.streamlit.app](https://smartloanpredictor.streamlit.app)
+- **Live App:** http://localhost:8501/
