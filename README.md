@@ -1,4 +1,4 @@
-# SmartLoanPredictor
+# Smart Loan Predictor
 
 [![Python](https://img.shields.io/badge/Python-3.10-blue?logo=python&logoColor=white)](https://www.python.org/)  
 [![Streamlit](https://img.shields.io/badge/Streamlit-App-green?logo=streamlit&logoColor=white)](https://smartloanpredictor.streamlit.app)  
