@@ -1,7 +1,7 @@
 # 🤖 Smart Loan Predictor (Python + Streamlit)
 
 ## 🔹 Introduction
-**SmartLoanPredictor** is a Streamlit app designed to predict loan default risk.  
+**Smart Loan Predictor** is a Streamlit app designed to predict loan default risk.  
 It uses customer behaviour and financial attributes to:  
 - Predict loan default (Yes/No)  
 - Show default probability via a visual probability plot  
