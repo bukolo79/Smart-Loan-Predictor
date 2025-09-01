@@ -47,4 +47,4 @@ Datasets merged:
     
 
 ## 🚀 Live Demo
-👉 [Local App Example](http://localhost:8501/)  
+👉 http://localhost:8501/
