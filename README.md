@@ -47,4 +47,4 @@ Datasets merged:
     
 
 ## 🚀 Live Demo
-👉 http://localhost:8501/
+👉 https://smart-loan-predictor.streamlit.app/
