@@ -40,7 +40,7 @@ Datasets merged:
 - **Best Model:** AdaBoost (optimized via GridSearchCV)  
 
 ### 4. Deployment
-- **Streamlit App**:  
+- **Streamlit App Features**:  
   - Sidebar: client inputs + About App  
   - Main Page: Prediction, Probability Plot, Client Summary  
   - Color-coded results (Red = High Risk, Green = Low Risk)
